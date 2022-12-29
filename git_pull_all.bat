@@ -8,53 +8,64 @@ for /f "tokens=2 delims=:." %%x in ('chcp') do set cp=%%x
 chcp 65001>nul
 
 rem Set look-up parameters
-set "cdir=/B /A:D /ON /S"
-set "cfil=.cdir.txt"
+set "carg=/B /A:D /ON /S"
+set "clst=.clst.txt"
+
+set "crel=%~dp0"
 
 rem Set "quiet" suffixes
 set "quiet=1>nul 2>nul"
 set "fquiet=/f /q 1>nul 2>nul"
 
-rem Get git folders
-del "%cfil%" %fquiet%
-dir %cdir% ".git">"%cfil%"
+echo; Current folder : %crel%
+echo; Scanning git folders...
+dir %carg% ".git">"!clst!"
+echo;
 
-rem If git command found
-if exist "%cfil%" (
-	rem Get git command from batch file name ('git_xxx_all')
+rem If git folders found
+if exist "!clst!" (
+	rem Get git 'xxx' command from batch file name ('git_xxx_all')
 	for /f "delims=_ tokens=1,2*" %%i in ("%~n0") do (
 		if "%%i"=="git" if "%%k"=="all" (
-			set "todo=%%j"
+			set "vcmd=%%j"
 		)
 	)
 
-	if not "!todo!"=="" (
-		set "disp=!todo!"
+	if not "!vcmd!"=="" (
+		set "vout=!vcmd!"
 		rem Set display in UPPERCASE
-		for %%b in (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) do set "disp=!disp:%%b=%%b!"
+		for %%b in (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) do set "vout=!vout:%%b=%%b!"
 		rem Set command in lowercase (because git is case sensitive)
-		for %%b in (a b c d e f g h i j k l m n o p q r s t u v w x y z) do set "todo=!todo:%%b=%%b!"
-		rem echo TODO : !todo!
+		for %%b in (a b c d e f g h i j k l m n o p q r s t u v w x y z) do set "vcmd=!vcmd:%%b=%%b!"
+REM		echo TODO : !vcmd!
 
 		rem For all paths found (yet not checked as valid)
-		for /f "delims=" %%i in (.cdir.txt) do (
-			rem echo %%i
-			set "cnf=%%i"
+		for /f "delims=" %%i in (!clst!) do (
+REM			echo %%i
+			set "vdir=%%i"
 			rem Check if "valid"
-			if exist "!cnf!\config" (
+			if exist "!vdir!\config" (
 				rem Change path and apply git command
-				cd /d "!cnf!\.."
-				echo === GIT !disp! : !cnf:~0,-5! =========
-				git !todo! -v
+				cd /d "!vdir!\.."
+				rem Replace starting path with '.\'
+				call set "vdir=!vdir:%crel%=.\!"
+				rem Display the folder without '\.git' (5 chars)
+				echo === GIT !vout! : !vdir:~0,-5! =========
+				git !vcmd! -v
 				echo;
 			)
 		)
 
+		echo Done...
+
 		rem Restore path
 		cd /d "%~dp0"
-		rem Delete git folders list
-		del "%cfil%" %fquiet%
+	) else (
+		echo No git command found...
 	)
+
+	rem Delete git folders list
+	del "%clst%" %fquiet%
 )
 
 rem Restore code page
