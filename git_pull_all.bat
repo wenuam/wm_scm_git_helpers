@@ -1,4 +1,5 @@
 @echo off && setlocal enabledelayedexpansion
+if "%~f0" neq "%tmp%\%~nx0" (type "%~f0" | find "" /v>"%tmp%\%~nx0" && call "%tmp%\%~nx0" %* & del "%tmp%\%~nx0" & exit /b)
 
 rem Apply git command on subfolder tree, by wenuam 2022
 rem 'git_xxx_all' -> 'git xxx' on all '*(\.git\config)' found
@@ -11,7 +12,7 @@ rem Set look-up parameters
 set "carg=/B /A:D /ON /S"
 set "clst=.clst.txt"
 
-set "crel=%~dp0"
+set "crel=%cd%"
 
 rem Set "quiet" suffixes
 set "quiet=1>nul 2>nul"

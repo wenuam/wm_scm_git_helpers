@@ -1,4 +1,5 @@
 @echo off && setlocal enableextensions enabledelayedexpansion
+if "%~f0" neq "%tmp%\%~nx0" (type "%~f0" | find "" /v>"%tmp%\%~nx0" && call "%tmp%\%~nx0" %* & del "%tmp%\%~nx0" & exit /b)
 
 rem Change git access token on subfolder tree, by wenuam 2022
 
@@ -10,7 +11,7 @@ rem Set look-up parameters
 set "carg=/B /A:D /ON /S"
 set "clst=.clst.txt"
 
-set "crel=%~dp0"
+set "crel=%cd%"
 set "curl=https://"
 set "caut=oauth2:"
 set "ctok=ghp_"
@@ -69,7 +70,7 @@ REM					echo vurl=!vurl!
 		)
 
 		rem Restore path
-		cd /d "%~dp0"
+		cd /d "%crel%"
 	) else (
 		echo No token provided...
 	)
