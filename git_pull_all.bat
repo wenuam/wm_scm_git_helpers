@@ -1,5 +1,5 @@
 @echo off && setlocal enabledelayedexpansion
-if "%~dp0" neq "%tmp%\" (set "cd=%~dp0" & (if not exist "%tmp%\%~nx0" (find "" /v<"%~f0" >"%tmp%\%~nx0")) & call "%tmp%\%~nx0" %* & del "%tmp%\%~nx0" 2>nul & exit /b) else (if "%cd:~-1%"=="\" set "cd=%cd:~0,-1%")
+if "%~dp0" neq "%tmp%\%guid%\" (set "guid=%~nx0.%~z0" & set "cd=%~dp0" & (if not exist "%tmp%\%~nx0.%~z0\%~nx0" (mkdir "%tmp%\%~nx0.%~z0" 2>nul & find "" /v<"%~f0" >"%tmp%\%~nx0.%~z0\%~nx0")) & call "%tmp%\%~nx0.%~z0\%~nx0" %* & rmdir /s /q "%tmp%\%~nx0.%~z0" 2>nul & exit /b) else (if "%cd:~-1%"=="\" set "cd=%cd:~0,-1%")
 
 rem Apply git command on subfolder tree, by wenuam 2022
 rem 'git_xxx_all' -> 'git xxx' on all '*(\.git\config)' found
