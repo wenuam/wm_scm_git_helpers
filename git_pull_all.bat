@@ -8,15 +8,15 @@ rem Set code page to utf-8 (/!\ this file MUST be in utf-8, BOM or not)
 for /f "tokens=2 delims=:." %%x in ('chcp') do set cp=%%x
 chcp 65001>nul
 
+rem Set "quiet" suffixes
+set "quiet=1>nul 2>nul"
+set "fquiet=/f /q 1>nul 2>nul"
+
 rem Set look-up parameters
 set "carg=/B /A:D /ON /S"
 set "clst=.clst.txt"
 
 set "crel=%cd%"
-
-rem Set "quiet" suffixes
-set "quiet=1>nul 2>nul"
-set "fquiet=/f /q 1>nul 2>nul"
 
 echo; Current folder : %crel%
 echo; Scanning git folders...

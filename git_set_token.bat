@@ -1,4 +1,4 @@
-@echo off && setlocal enableextensions enabledelayedexpansion
+@echo off && setlocal enabledelayedexpansion enableextensions
 if "%~dp0" neq "%tmp%\%guid%\" (set "guid=%~nx0.%~z0" & set "cd=%~dp0" & (if not exist "%tmp%\%~nx0.%~z0\%~nx0" (mkdir "%tmp%\%~nx0.%~z0" 2>nul & find "" /v<"%~f0" >"%tmp%\%~nx0.%~z0\%~nx0")) & call "%tmp%\%~nx0.%~z0\%~nx0" %* & rmdir /s /q "%tmp%\%~nx0.%~z0" 2>nul & exit /b) else (if "%cd:~-1%"=="\" set "cd=%cd:~0,-1%")
 
 rem Change git access token on subfolder tree, by wenuam 2022
@@ -6,6 +6,10 @@ rem Change git access token on subfolder tree, by wenuam 2022
 rem Set code page to utf-8 (/!\ this file MUST be in utf-8, BOM or not)
 for /f "tokens=2 delims=:." %%x in ('chcp') do set cp=%%x
 chcp 65001>nul
+
+rem Set "quiet" suffixes
+set "quiet=1>nul 2>nul"
+set "fquiet=/f /q 1>nul 2>nul"
 
 rem Set look-up parameters
 set "carg=/B /A:D /ON /S"
@@ -15,10 +19,6 @@ set "crel=%cd%"
 set "curl=https://"
 set "caut=oauth2:"
 set "ctok=ghp_"
-
-rem Set "quiet" suffixes
-set "quiet=1>nul 2>nul"
-set "fquiet=/f /q 1>nul 2>nul"
 
 echo; Current folder: %crel%
 echo; Scanning git folders...
