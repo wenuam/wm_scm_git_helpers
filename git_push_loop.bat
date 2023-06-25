@@ -1,4 +1,4 @@
-@echo off && setlocal enabledelayedexpansion
+@echo off && setlocal EnableDelayedExpansion
 
 rem Retry 'git push' until it works, by wenuam 2022
 rem Used when many/large files are pushed (random timeout might occurs)
