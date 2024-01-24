@@ -1,3 +1,3 @@
-@echo off && setlocal EnableDelayedExpansion
+@echo off
 
-rundll32.exe keymgr.dll,KRShowKeyMgr
+startn "" rundll32.exe keymgr.dll,KRShowKeyMgr
